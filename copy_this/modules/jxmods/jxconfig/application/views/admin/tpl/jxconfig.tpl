@@ -114,11 +114,11 @@ function changeFnc( fncName )
 </div>
 
 <script type="text/javascript">
-    document.getElementById("headcol1").width = document.getElementById("bodycol1").style.width;
-    document.getElementById("headcol2").width = document.getElementById("bodycol2").style.width;
-    document.getElementById("headcol3").width = document.getElementById("bodycol3").style.width;
-    document.getElementById("headcol4").width = document.getElementById("bodycol4").style.width;
-    //alert( document.getElementById("bodycol1").style.width );
+    document.getElementById("headcol1").style.width = document.getElementById("bodycol1").offsetWidth;
+    document.getElementById("headcol2").style.width = document.getElementById("bodycol2").offsetWidth;
+    document.getElementById("headcol3").style.width = document.getElementById("bodycol3").offsetWidth;
+    document.getElementById("headcol4").style.width = document.getElementById("bodycol4").offsetWidth;
+    //alert(document.getElementById("bodycol1").offsetWidth);
 </script>
     
 [{include file="bottomnaviitem.tpl"}]
