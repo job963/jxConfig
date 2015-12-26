@@ -11,8 +11,11 @@ OXID eShop Admin Extension for Displaying the internal Shop Configuration Table
   
 ## Screenshots ##
 
-#### Object Log on most of the objects ####
+#### Core Settings of Shop ####
 ![Object History Log](https://github.com/job963/jxConfig/raw/master/docs/img/config_core_settings.png)
 
-#### Full Log Report ####
+#### Settings of Modules ####
 ![Full Log Report](https://github.com/job963/jxConfig/raw/master/docs/img/config_module_settings.png)
+
+#### Filtered Display ####
+![Full Log Report](https://github.com/job963/jxConfig/raw/master/docs/img/config_module_filtered.png)
