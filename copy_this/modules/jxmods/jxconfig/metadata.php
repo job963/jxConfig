@@ -15,7 +15,7 @@ $aModule = array(
                         'en' => 'Display of Logged Administrative Actions for each Object and as complete Report.'
                         ),
     'thumbnail'    => 'jxconfig.png',
-    'version'      => '0.1.0',
+    'version'      => '0.1.1',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxConfig',
     'email'        => 'jobarthel@gmail.com',
