@@ -1,3 +1,3 @@
 <?php
-	include oxRegistry::get( "oxConfigFile" )->getVar( "sShopDir" ) . '/modules/jxmods/jxadminlog/application/views/admin/en/jxadminlog_lang.php';
+	include oxRegistry::get( "oxConfigFile" )->getVar( "sShopDir" ) . '/modules/jxmods/jxconfig/application/views/admin/en/jxconfig_lang.php';
 ?>
