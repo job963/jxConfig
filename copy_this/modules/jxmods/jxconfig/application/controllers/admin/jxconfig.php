@@ -17,7 +17,7 @@
  *
  * @link      https://github.com/job963/jxAdminLog
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * @copyright (C) 2015 Joachim Barthel
+ * @copyright (C) 2015-2016 Joachim Barthel
  * @author    Joachim Barthel <jobarthel@gmail.com>
  *
  */
@@ -36,57 +36,64 @@ class jxconfig extends oxAdminDetails {
         $myConfig = oxRegistry::getConfig();
         $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         
+        if ($myConfig->getBaseShopId() == 'oxbaseshop') {
+            // CE or PE shop
+            $sShopId = "'{$myConfig->getBaseShopId()}'";
+        } else {
+            // EE shop
+            $sShopId = "{$myConfig->getBaseShopId()}";
+        }
+        
         $sExtension = $this->getConfig()->getRequestParameter( 'jx_extension' );
         if (empty($sExtension)) {
-            $sExtension = '*';
-        }
+            $sExtension = '%';
+        } /*else {
+            $sExtension = "%{$sExtension}%";
+        }*/
         $sVarname = $this->getConfig()->getRequestParameter( 'jx_varname' );
         if (empty($sVarname)) {
-            $sVarname = '*';
+            $sVarname = '%';
+        } else {
+            $sVarname = "%{$sVarname}%";
         }
         $sVarvalue = $this->getConfig()->getRequestParameter( 'jx_varvalue' );
         if (empty($sVarvalue)) {
-            $sVarvalue = '*';
+            $sVarvalue = '%';
+        } else {
+            $sVarvalue = "%{$sVarvalue}%";
         }
-        //echo $sExtension . ' / ' . $sVarname . ' / ' . $sVarvalue;
 
         $sSql = "SELECT oxmodule, oxvarname, oxvartype, DECODE(oxvarvalue, " . $oDb->quote($myConfig->getConfigParam('sConfigKey')) . ") AS oxvarvaluedecoded "
-                . "FROM `oxconfig` "
-                . "/*WHERE oxmodule = '{$sExtension}'*/ "
-                . "/*ORDER BY `OXMODULE`, `OXVARNAME` ASC*/; ";
+                . "FROM oxconfig "
+                . "WHERE oxshopid = {$sShopId} "
+                    . "AND oxmodule LIKE '{$sExtension}' "
+                    . "AND oxvarname LIKE '{$sVarname}' "
+                    . "AND DECODE(oxvarvalue, " . $oDb->quote($myConfig->getConfigParam('sConfigKey')) . ") LIKE '{$sVarvalue}' "
+                . "ORDER BY oxmodule, oxvarname ASC ";
 
         try {
-        $rs = $oDb->Execute($sSql);
+            $rs = $oDb->Select($sSql);
         }
         catch (Exception $e) {
             echo $e->getMessage();
         }
         $aConfigItems = array();
         while (!$rs->EOF) {
-            if (( strpos($rs->fields['oxmodule'], $sExtension) !== FALSE ) || ($sExtension == '*')) {
-                if ((strpos(strtolower($rs->fields['oxvarname']), strtolower($sVarname)) !== FALSE ) || ($sVarname == '*')) {
-                    if ((strpos(strtolower($rs->fields['oxvarvaluedecoded']), strtolower($sVarvalue)) !== FALSE ) || ($sVarvalue == '*')) {
-                        array_push($aConfigItems, $rs->fields);
-                    }
-                }
-            }
+            array_push($aConfigItems, $rs->fields);
             $rs->MoveNext();
         }
-        //echo '<pre>';
-        //print_r($aConfigItems);
-        //echo '</pre>';
 
         foreach ($aConfigItems as $key => $aConfigItem) {
             if (($aConfigItems[$key]['oxvartype'] == 'arr') || ($aConfigItems[$key]['oxvartype'] == 'aarr')) {
                 //
                 $aConfigItems[$key]['oxvarvaluedecoded'] = print_r( unserialize( $aConfigItems[$key]['oxvarvaluedecoded'] ), TRUE);
             }
-            $aSort[] = $aConfigItem[$key]['oxmodule'] . '-' . $aConfigItem[$key]['oxvarname'];
         }
-        array_multisort($aSort, SORT_ASC, $aConfigItems);
 
         
-        $sSql = "SELECT DISTINCT oxmodule FROM oxconfig ";
+        $sSql = "SELECT DISTINCT oxmodule "
+                . "FROM oxconfig "
+                . "WHERE oxshopid = {$sShopId} ";
         $rs = $oDb->Execute($sSql);
         $aExtensions = array();
         while (!$rs->EOF) {
@@ -177,21 +184,5 @@ class jxconfig extends oxAdminDetails {
 
         return $sText;
     }
-    
-    
-    /*
-    public function deleteVoucher() 
-    {
-        $sVoucherId = oxRegistry::getConfig()->getRequestParameter( 'voucherdelid' );
-        
-        //echo 'deleteVoucher='.$sVoucherId;
-        $sSql = "DELETE FROM oxvouchers WHERE oxid = '{$sVoucherId}' ";
-        $oDb = oxDb::getDb();
-        $oDb->Execute($sSql);
-        $oDb = null;
-        
-        return;
-    }
-    */
 	
 }

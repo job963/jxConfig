@@ -15,7 +15,7 @@ $aModule = array(
                         'en' => 'Display of shop and module settings as complete report.'
                         ),
     'thumbnail'    => 'jxconfig.png',
-    'version'      => '0.1.2',
+    'version'      => '0.1.3',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxConfig',
     'email'        => 'jobarthel@gmail.com',

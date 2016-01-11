@@ -6,18 +6,7 @@
     [{assign var="readonly" value=""}]
 [{/if}]
 
-[{*
-<script type="text/javascript">
-<!--
-function changeFnc( fncName )
-{
-    var langvar = document.myedit.elements['fnc'];
-    if (langvar != null )
-        langvar.value = fncName;
-}
-//-->
-</script>
-*}]
+
 <style>
     #liste tr:hover td{
         background-color: #e0e0e0;
@@ -72,13 +61,13 @@ function changeFnc( fncName )
                         </td>
                         <td class="listfilter">
                             <div class="r1"><div class="b1">
-                                <input type="text" name="jx_varname" value="[{if $sVarname!="*"}][{$sVarname}][{/if}]" />
+                                <input type="text" name="jx_varname" value="[{if $sVarname!="%"}][{$sVarname}][{/if}]" />
                             </div></div>
                         </td>
                         <td class="listfilter"><div class="r1"><div class="b1"></div></div></td>
                         <td class="listfilter">
                             <div class="r1"><div class="b1">
-                                <input type="text" name="jx_varvalue" value="[{if $sVarvalue!="*"}][{$sVarvalue}][{/if}]" size="40" />
+                                <input type="text" name="jx_varvalue" value="[{if $sVarvalue!="%"}][{$sVarvalue}][{/if}]" size="40" />
                                 <input class="listedit" name="submitit" value="Suchen" onclick="Javascript:document.search.lstrt.value=0;" type="submit">
                             </div></div>
                         </td>
