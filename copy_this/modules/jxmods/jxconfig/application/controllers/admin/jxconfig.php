@@ -1,13 +1,13 @@
 <?php
 /**
- *    This file is part of the module jxAdminLog for OXID eShop Community Edition.
+ *    This file is part of the module jxConfig for OXID eShop Community Edition.
  *
- *    The module jxAdminLog for OXID eShop Community Edition is free software: you can redistribute it and/or modify
+ *    The module jxConfig for OXID eShop Community Edition is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation, either version 3 of the License, or
  *    (at your option) any later version.
  *
- *    The module jxAdminLog for OXID eShop Community Edition is distributed in the hope that it will be useful,
+ *    The module jxConfig for OXID eShop Community Edition is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *    GNU General Public License for more details.
@@ -15,7 +15,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with OXID eShop Community Edition.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @link      https://github.com/job963/jxAdminLog
+ * @link      https://github.com/job963/jxConfig
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
  * @copyright (C) 2015-2016 Joachim Barthel
  * @author    Joachim Barthel <jobarthel@gmail.com>
@@ -45,30 +45,15 @@ class jxconfig extends oxAdminDetails {
         }
         
         $sExtension = $this->getConfig()->getRequestParameter( 'jx_extension' );
-        if (empty($sExtension)) {
-            $sExtension = '%';
-        } /*else {
-            $sExtension = "%{$sExtension}%";
-        }*/
         $sVarname = $this->getConfig()->getRequestParameter( 'jx_varname' );
-        if (empty($sVarname)) {
-            $sVarname = '%';
-        } else {
-            $sVarname = "%{$sVarname}%";
-        }
         $sVarvalue = $this->getConfig()->getRequestParameter( 'jx_varvalue' );
-        if (empty($sVarvalue)) {
-            $sVarvalue = '%';
-        } else {
-            $sVarvalue = "%{$sVarvalue}%";
-        }
 
         $sSql = "SELECT oxmodule, oxvarname, oxvartype, DECODE(oxvarvalue, " . $oDb->quote($myConfig->getConfigParam('sConfigKey')) . ") AS oxvarvaluedecoded "
                 . "FROM oxconfig "
                 . "WHERE oxshopid = {$sShopId} "
-                    . "AND oxmodule LIKE '{$sExtension}' "
-                    . "AND oxvarname LIKE '{$sVarname}' "
-                    . "AND DECODE(oxvarvalue, " . $oDb->quote($myConfig->getConfigParam('sConfigKey')) . ") LIKE '{$sVarvalue}' "
+                    . "AND oxmodule LIKE '%{$sExtension}%' "
+                    . "AND oxvarname LIKE '%{$sVarname}%' "
+                    . "AND DECODE(oxvarvalue, " . $oDb->quote($myConfig->getConfigParam('sConfigKey')) . ") LIKE '%{$sVarvalue}%' "
                 . "ORDER BY oxmodule, oxvarname ASC ";
 
         try {
@@ -164,25 +149,6 @@ class jxconfig extends oxAdminDetails {
         }
         
         return "AND  l.oxsql REGEXP '" . $sRegex . "' ";
-    }
-    
-    
-    private function _keywordHighlighter( $sText ) 
-    {
-        $aSearch = array(
-            'insert',
-            'update',
-            'delete'
-        );
-        $aReplace = array(
-            '<span style="color:green;">insert</span>',
-            '<span style="color:blue;">update</span>',
-            '<span style="color:red;">delete</span>'
-        );
-        
-        $sText = str_replace($aSearch, $aReplace, $sText);
-
-        return $sText;
     }
 	
 }
