@@ -17,7 +17,7 @@
  *
  * @link      https://github.com/job963/jxConfig
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
- * @copyright (C) 2015-2016 Joachim Barthel
+ * @copyright (C) 2015-2017 Joachim Barthel
  * @author    Joachim Barthel <jobarthel@gmail.com>
  *
  */
@@ -27,7 +27,9 @@ class jxconfig extends oxAdminDetails {
     protected $_sThisTemplate = "jxconfig.tpl";
 
     /**
-     * Displays the latest log entries
+     * Displays the entries of database table oxconfig as readable table
+     * 
+     * @return type Description
      */
     public function render() 
     {
@@ -69,8 +71,8 @@ class jxconfig extends oxAdminDetails {
         }
 
         foreach ($aConfigItems as $key => $aConfigItem) {
-            if (($aConfigItems[$key]['oxvartype'] == 'arr') || ($aConfigItems[$key]['oxvartype'] == 'aarr')) {
-                //
+            if (($aConfigItems[$key]['oxvartype'] == 'arr') || ($aConfigItems[$key]['oxvartype'] == 'aarr') || (substr($aConfigItems[$key]['oxvarvaluedecoded'],0,2) == 'a:')) {
+                // Unserializing of arrays
                 $aConfigItems[$key]['oxvarvaluedecoded'] = print_r( unserialize( $aConfigItems[$key]['oxvarvaluedecoded'] ), TRUE);
             }
         }
@@ -102,6 +104,14 @@ class jxconfig extends oxAdminDetails {
     }
 	
 	
+    /**
+     * 
+     * 
+     * @param type $sReport
+     * @param string $sFreeRegexp
+     * 
+     * @return string
+     */
     private function _createKeywordFilter( $sReport, $sFreeRegexp )
     {
         switch ( $sReport ) {

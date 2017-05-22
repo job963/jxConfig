@@ -6,6 +6,12 @@ $sMetadataVersion = '1.1';
  
 /**
  * Module information
+ * 
+ * @link      https://github.com/job963/jxConfig
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GPL v3 or later
+ * @copyright (C) 2015-2017 Joachim Barthel
+ * @author    Joachim Barthel <jobarthel@gmail.com>
+ * 
  */
 $aModule = array(
     'id'           => 'jxconfig',
@@ -15,7 +21,7 @@ $aModule = array(
                         'en' => 'Display of shop and modules settings as complete report.'
                         ),
     'thumbnail'    => 'jxconfig.png',
-    'version'      => '0.1.4',
+    'version'      => '0.2.0',
     'author'       => 'Joachim Barthel',
     'url'          => 'https://github.com/job963/jxConfig',
     'email'        => 'jobarthel@gmail.com',
