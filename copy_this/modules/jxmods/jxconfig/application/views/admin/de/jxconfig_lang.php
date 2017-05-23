@@ -11,5 +11,6 @@ $aLang = array(
 	'JXCONFIG_VARNAME'                      => 'Variable',
 	'JXCONFIG_VARTYPE'                      => 'Typ',
 	'JXCONFIG_VARVALUE'                     => 'Wert',
-	'JXCONFIG_PRINT'                        => 'Drucken'
+	'JXCONFIG_PRINT'                        => 'Drucken',
+	'JXCONFIG_EXPORT'                       => 'Exportieren'
 );

@@ -131,7 +131,16 @@
 <div class="actions">
 
 <ul>
-    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.print" href="#" onClick="Javascript:window.print();return false;" [{*target="edit"*}]>[{ oxmultilang ident="JXCONFIG_PRINT" }]</a></li>
+    <li><a [{if !$firstitem}]class="firstitem"[{assign var="firstitem" value="1"}][{/if}] id="btn.print" href="#" onClick="Javascript:window.print();return false;" [{*target="edit"*}]>[{ oxmultilang ident="JXCONFIG_PRINT" }]</a> |</li>
+    <li>
+        <form name="jxconfigexport" id="btn.export" action="[{ $oViewConf->getSelfLink() }]" method="post">
+            [{ $oViewConf->getHiddenSid() }]
+            <input type="hidden" name="oxid" value="[{ $oxid }]">
+            <input type="hidden" name="cl" value="jxconfig">
+            <input type="hidden" name="fnc" value="jxExportConfigData">
+            <a href="#" onClick="Javascript:document.jxconfigexport.submit();">[{ oxmultilang ident="JXCONFIG_EXPORT" }]</a>
+        </form>
+    </li>
 </ul>
 </div>
 

@@ -1,6 +1,6 @@
-#jxConfig#
+# jxConfig #
 
-OXID eShop Admin Extension for Displaying the internal Shop Configuration Table
+OXID eShop Admin Extension for Displaying and Printing the internal Shop Configuration Table
 
 
 ## Setup ##
@@ -19,3 +19,17 @@ OXID eShop Admin Extension for Displaying the internal Shop Configuration Table
 
 #### Filtered Display ####
 ![Full Log Report](https://github.com/job963/jxConfig/raw/master/docs/img/config_module_filter.png)
+
+
+## Release history ##
+
+* **Release 0.1**
+  * Initial release
+  * Retrieving and decoding of oxconfig records
+  * Filtering by extension, variable and/or value
+
+* **Release 0.2**
+  * Print function added
+  * Export as JSON added
+  * Translations changed to UTF-8
+  * Error corrections

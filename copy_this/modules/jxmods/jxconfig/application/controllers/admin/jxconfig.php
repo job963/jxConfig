@@ -24,7 +24,12 @@
 
 class jxconfig extends oxAdminDetails {
 
+    /**
+     *
+     * @var type 
+     */
     protected $_sThisTemplate = "jxconfig.tpl";
+    
 
     /**
      * Displays the entries of database table oxconfig as readable table
@@ -50,33 +55,7 @@ class jxconfig extends oxAdminDetails {
         $sVarname = $this->getConfig()->getRequestParameter( 'jx_varname' );
         $sVarvalue = $this->getConfig()->getRequestParameter( 'jx_varvalue' );
 
-        $sSql = "SELECT oxmodule, oxvarname, oxvartype, DECODE(oxvarvalue, " . $oDb->quote($myConfig->getConfigParam('sConfigKey')) . ") AS oxvarvaluedecoded "
-                . "FROM oxconfig "
-                . "WHERE oxshopid = {$sShopId} "
-                    . "AND oxmodule LIKE '%{$sExtension}%' "
-                    . "AND oxvarname LIKE '%{$sVarname}%' "
-                    . "AND DECODE(oxvarvalue, " . $oDb->quote($myConfig->getConfigParam('sConfigKey')) . ") LIKE '%{$sVarvalue}%' "
-                . "ORDER BY oxmodule, oxvarname ASC ";
-
-        try {
-            $rs = $oDb->Select($sSql);
-        }
-        catch (Exception $e) {
-            echo $e->getMessage();
-        }
-        $aConfigItems = array();
-        while (!$rs->EOF) {
-            array_push($aConfigItems, $rs->fields);
-            $rs->MoveNext();
-        }
-
-        foreach ($aConfigItems as $key => $aConfigItem) {
-            if (($aConfigItems[$key]['oxvartype'] == 'arr') || ($aConfigItems[$key]['oxvartype'] == 'aarr') || (substr($aConfigItems[$key]['oxvarvaluedecoded'],0,2) == 'a:')) {
-                // Unserializing of arrays
-                $aConfigItems[$key]['oxvarvaluedecoded'] = print_r( unserialize( $aConfigItems[$key]['oxvarvaluedecoded'] ), TRUE);
-            }
-        }
-
+        $aConfigItems = $this->_requestConfigData($sExtension, $sVarname, $sVarvalue, 'html');
         
         $sSql = "SELECT DISTINCT oxmodule "
                 . "FROM oxconfig "
@@ -105,12 +84,85 @@ class jxconfig extends oxAdminDetails {
 	
 	
     /**
+     * Exports the records from oxconfig as JSON download
      * 
+     * @return null
+     */
+    public function jxExportConfigData () 
+    {
+        $aConfigItems = $this->_requestConfigData($sExtension, $sVarname, $sVarvalue, 'json');
+        $sJson = json_encode($aConfigItems, JSON_PRETTY_PRINT);
+
+        header("Content-type: application/json");
+        header("Content-length: ".strlen($sJson));
+        header("Content-disposition: attachment; filename=\"oxconfig-export.json\"");
+        
+        echo $sJson;
+        
+        exit();
+        
+        return;
+    }
+    
+    
+    /**
+     * Retrieves and decodes records from table oxconfig filtered by the given parameters
      * 
-     * @param type $sReport
-     * @param string $sFreeRegexp
+     * @param string $sExtension    Optional filter string for extensions
+     * @param string $sVarname      Optional filter string for variables
+     * @param string $sVarvalue     Optional filter string criteria for values
+     * @param string $sType         Optional output type parameter
      * 
-     * @return string
+     * @return array    Decoded values from oxconfig as array
+     */
+    private function _requestConfigData($sExtension = '', $sVarname = '', $sVarvalue = '', $sType = 'html') 
+    {
+        $oConfig = oxRegistry::getConfig();
+        $oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
+        
+        $sSql = "SELECT oxmodule, oxvarname, oxvartype, DECODE(oxvarvalue, " . $oDb->quote($oConfig->getConfigParam('sConfigKey')) . ") AS oxvarvaluedecoded "
+                . "FROM oxconfig "
+                . "WHERE oxshopid = " . $oDb->quote($oConfig->getBaseShopId()) . " "
+                    . "AND oxmodule LIKE '%{$sExtension}%' "
+                    . "AND oxvarname LIKE '%{$sVarname}%' "
+                    . "AND DECODE(oxvarvalue, " . $oDb->quote($oConfig->getConfigParam('sConfigKey')) . ") LIKE '%{$sVarvalue}%' "
+                . "ORDER BY oxmodule, oxvarname ASC ";
+
+        try {
+            $rs = $oDb->Select($sSql);
+        }
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        $aConfigItems = array();
+        while (!$rs->EOF) {
+            array_push($aConfigItems, $rs->fields);
+            $rs->MoveNext();
+        }
+
+        foreach ($aConfigItems as $key => $aConfigItem) {
+            if (($aConfigItems[$key]['oxvartype'] == 'arr') || ($aConfigItems[$key]['oxvartype'] == 'aarr') || (substr($aConfigItems[$key]['oxvarvaluedecoded'],0,2) == 'a:')) {
+                // Unserializing of arrays
+                if ($sType == 'html') {
+                    $aConfigItems[$key]['oxvarvaluedecoded'] = print_r( unserialize( $aConfigItems[$key]['oxvarvaluedecoded'] ), TRUE);
+                }
+                else {
+                    $aConfigItems[$key]['oxvarvaluedecoded'] = unserialize( $aConfigItems[$key]['oxvarvaluedecoded'] );
+                }
+            }
+        }
+        
+        return $aConfigItems;
+    }
+    
+    
+    /**
+     * Filters the output by object types and/or texts
+     * 
+     * @param type   $sReport       Object type/table, eg. article, user, ...
+     * @param string $sFreeRegexp   Regular expression for filtering by text
+     * 
+     * @return string   SQL statement 
      */
     private function _createKeywordFilter( $sReport, $sFreeRegexp )
     {
