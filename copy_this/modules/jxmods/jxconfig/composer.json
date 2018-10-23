@@ -1,0 +1,25 @@
+{
+  "name": "jxmods/jxconfig",
+  "description": "jxConfig - Display of Shop and Module Configurations",
+  "type": "oxideshop-module",
+  "keywords": ["oxid", "modules", "eShop"],
+  "homepage": "https://github.com/job963/jxConfig",
+  "license": [
+    "GPL-3.0-only",
+    "proprietary"
+  ],
+  "minimum-stability": "stable",
+  "extra": {
+    "oxideshop": {
+      "target-directory": "jxmods/jxconfig"
+    }
+  },
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "jxMods\\jxConfig\\": "../../../source/modules/jxmods/jxconfig"
+    }
+  }
+}
