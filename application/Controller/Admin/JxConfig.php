@@ -30,43 +30,17 @@ use OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
-//-class jxconfig extends oxAdminDetails 
 class JxConfig extends AdminDetailsController
 {
 
     /**
-     *
-     * @var type 
-     */
-    //-protected $_sThisTemplate = "jxconfig.tpl";
-    
-
-    /**
      * Displays the entries of database table oxconfig as readable table
      * 
-     * @return type Description
+     * @return string Filename of template file
      */
     public function render() 
     {
-        //-parent::render();
 
-        //-$myConfig = oxRegistry::getConfig();
-        //-$oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-        
-        /*if ($myConfig->getBaseShopId() == 'oxbaseshop') {
-            // CE or PE shop
-            $sShopId = "'{$myConfig->getBaseShopId()}'";
-        } else {
-            // EE shop
-            $sShopId = "{$myConfig->getBaseShopId()}";
-        }*/
-        //$sShopId = $this->getConfig()->getBaseShopId();
-        
-        //-$sExtension = $this->getConfig()->getRequestParameter( 'jx_extension' );
-        //-$sVarname = $this->getConfig()->getRequestParameter( 'jx_varname' );
-        //-$sVarvalue = $this->getConfig()->getRequestParameter( 'jx_varvalue' );
-        
-        
         /**
          * @var Request $request 
          */
@@ -77,36 +51,20 @@ class JxConfig extends AdminDetailsController
          */
         $module = oxNew(Module::class);
 
-        
-        /*$jxExtension = $request->getRequestEscapedParameter( 'jx_extension' );
+        $jxExtension = $request->getRequestEscapedParameter( 'jx_extension' );
         $jxVarName = $request->getRequestEscapedParameter( 'jx_varname' );
         $jxVarValue = $request->getRequestEscapedParameter( 'jx_varvalue' );
 
-        $aConfigItems = $this->_getConfigData($sExtension, $sVarname, $sVarvalue, 'html');
+        $this->_aViewData['sExtension'] = $jxExtension;
+        $this->_aViewData['sVarname'] = $jxVarName;
+        $this->_aViewData['sVarvalue'] = $jxVarValue;
         
-        $aExtensionNames = $this->_getExtensionNames();*/
-        
-        /*$sSql = "SELECT DISTINCT oxmodule "
-                . "FROM oxconfig "
-                . "WHERE oxshopid = {$sShopId} ";
-        $rs = $oDb->Execute($sSql);
-        $aExtensions = array();
-        while (!$rs->EOF) {
-            array_push($aExtensions, $rs->fields);
-            $rs->MoveNext();
-        }*/
-
-        $this->_aViewData['sExtension'] = $request->getRequestEscapedParameter( 'jx_extension' );
-        $this->_aViewData['sVarname'] = $request->getRequestEscapedParameter( 'jx_varname' );
-        $this->_aViewData['sVarvalue'] = $request->getRequestEscapedParameter( 'jx_varvalue' );
-        $this->_aViewData['aConfigItems'] = $this->_getConfigData($sExtension, $sVarname, $sVarvalue, 'html');
+        $this->_aViewData['aConfigItems'] = $this->_getConfigData($jxExtension, $jxVarName, $jxVarValue, 'html');
         $this->_aViewData['aExtensions'] = $this->_getExtensionNames();
 
         $module->load( 'jxconfig' );
         $this->_aViewData['sModuleId'] = $module->getId();
         $this->_aViewData['sModuleVersion'] = $module->getInfo('version');
-
-        //-return $this->_sThisTemplate;
         
         parent::render();
         
@@ -137,48 +95,17 @@ class JxConfig extends AdminDetailsController
     
     
     /**
+     * Get all used module names of table oxconfig
      * 
      * @return array $aExtensionNames
      */
     private function _getExtensionNames() 
     {
-        //-$oConfig = oxRegistry::getConfig();
-        //$oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-        $oDb = DatabaseProvider::getDb();
-        
         $sSql = "SELECT DISTINCT oxmodule "
                 . "FROM oxconfig "
-                . "WHERE oxshopid = " . $this->getConfig()->getBaseShopId();
+                . "WHERE oxshopid = " . $this->getConfig()->getBaseShopId() . ";";
 
-        try {
-            //-$rs = $oDb->Select($sSql);
-            $resultSet = $oDb->select($sSql);
-        }
-        catch (Exception $e) {
-            echo $e->getMessage();
-        }
-        $aExtensionNames = array();
-        //-while (!$rs->EOF) {
-        //-    array_push($aConfigItems, $rs->fields);
-        //-    $rs->MoveNext();
-        //-}
-        /*$allResults = $resultSet->fetchAll();
-        foreach ($allResults as $row) {
-            
-        }*/
-        $aExtensionNames = $resultSet->fetchAll();
-
-        /*foreach ($aConfigItems as $key => $aConfigItem) {
-            if (($aConfigItems[$key]['oxvartype'] == 'arr') || ($aConfigItems[$key]['oxvartype'] == 'aarr') || (substr($aConfigItems[$key]['oxvarvaluedecoded'],0,2) == 'a:')) {
-                // Unserializing of arrays
-                if ($sType == 'html') {
-                    $aConfigItems[$key]['oxvarvaluedecoded'] = print_r( unserialize( $aConfigItems[$key]['oxvarvaluedecoded'] ), TRUE);
-                }
-                else {
-                    $aConfigItems[$key]['oxvarvaluedecoded'] = unserialize( $aConfigItems[$key]['oxvarvaluedecoded'] );
-                }
-            }
-        }*/
+        $aExtensionNames = $this->_fetchAllRecords($sSql);
         
         return $aExtensionNames;
     }
@@ -196,35 +123,17 @@ class JxConfig extends AdminDetailsController
      */
     private function _getConfigData($sExtension = '', $sVarname = '', $sVarvalue = '', $sType = 'html') 
     {
-        //-$oConfig = oxRegistry::getConfig();
-        //$oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
-        $oDb = DatabaseProvider::getDb();
+        $oDb = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
         
-        $sSql = "SELECT oxmodule, oxvarname, oxvartype, DECODE(oxvarvalue, " . $oDb->quote($oConfig->getConfigParam('sConfigKey')) . ") AS oxvarvaluedecoded "
+        $sSql = "SELECT oxmodule, oxvarname, oxvartype, DECODE(oxvarvalue, " . $oDb->quote($this->getConfig()->getConfigParam('sConfigKey')) . ") AS oxvarvaluedecoded "
                 . "FROM oxconfig "
                 . "WHERE oxshopid = " . $this->getConfig()->getBaseShopId() . " "
                     . "AND oxmodule LIKE '%{$sExtension}%' "
                     . "AND oxvarname LIKE '%{$sVarname}%' "
-                    . "AND DECODE(oxvarvalue, " . $oDb->quote($oConfig->getConfigParam('sConfigKey')) . ") LIKE '%{$sVarvalue}%' "
+                    . "AND DECODE(oxvarvalue, " . $oDb->quote($this->getConfig()->getConfigParam('sConfigKey')) . ") LIKE '%{$sVarvalue}%' "
                 . "ORDER BY oxmodule, oxvarname ASC ";
 
-        try {
-            //-$rs = $oDb->Select($sSql);
-            $resultSet = $oDb->select($sSql);
-        }
-        catch (Exception $e) {
-            echo $e->getMessage();
-        }
-        $aConfigItems = array();
-        //-while (!$rs->EOF) {
-        //-    array_push($aConfigItems, $rs->fields);
-        //-    $rs->MoveNext();
-        //-}
-        /*$allResults = $resultSet->fetchAll();
-        foreach ($allResults as $row) {
-            
-        }*/
-        $aConfigItems = $resultSet->fetchAll();
+        $aConfigItems = $this->_fetchAllRecords($sSql);
 
         foreach ($aConfigItems as $key => $aConfigItem) {
             if (($aConfigItems[$key]['oxvartype'] == 'arr') || ($aConfigItems[$key]['oxvartype'] == 'aarr') || (substr($aConfigItems[$key]['oxvarvaluedecoded'],0,2) == 'a:')) {
@@ -243,60 +152,25 @@ class JxConfig extends AdminDetailsController
     
     
     /**
-     * Filters the output by object types and/or texts
+     * Fetches all records of the given select statement
      * 
-     * @param type   $sReport       Object type/table, eg. article, user, ...
-     * @param string $sFreeRegexp   Regular expression for filtering by text
+     * @param string $query
      * 
-     * @return string   SQL statement 
+     * @return array
      */
-    private function _createKeywordFilter( $sReport, $sFreeRegexp )
+    private function _fetchAllRecords(string $query)
     {
-        switch ( $sReport ) {
-
-            case 'article':
-                $aKeywords = array('oxarticles','oxartextends');
-                break;
-
-            case 'category':
-                $aKeywords = array('oxarticles','oxartextends');
-                break;
-
-            case 'user':
-                $aKeywords = array('oxuser','oxnewssubscribed','oxremark');
-                break;
-
-            case 'order':
-                $aKeywords = array('oxorder','oxorderarticles');
-                break;
-
-            case 'payment':
-                $aKeywords = array('oxpayments');
-                break;
-
-            case 'module':
-                $aKeywords = array('oxconfig','oxconfigdisplay','oxtplblocks');
-                break;
-
-            case 'regexp':
-                if (empty($sFreeRegexp)) {
-                    $sFreeRegexp = '.';
-                }
-                $aKeywords = array( $sFreeRegexp );
-                break;
-
-            default:    // all
-                return '';
-                break;
-        }
+        $oDb = DatabaseProvider::getDb(DatabaseProvider::FETCH_MODE_ASSOC);
         
-        if (count($aKeywords) > 1) {
-            $sRegex = implode( '|', $aKeywords );
-        } else {
-            $sRegex = $aKeywords[0];
+        try {
+            $resultSet = $oDb->select( $query );
         }
-        
-        return "AND  l.oxsql REGEXP '" . $sRegex . "' ";
+        catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+        return $resultSet->fetchAll();
     }
+    
 	
 }
