@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "jxMods\\jxConfig\\": "../../../source/modules/jxmods/jxconfig"
+      "JxMods\\JxConfig\\": "../../../source/modules/jxmods/jxconfig"
     }
   }
 }
