@@ -3,7 +3,7 @@
 ## Release history
 
 ### Release 0.3
-  * Upgrade for OXID 6.x
+  * Upgrade to OXID 6.x compatibility
 
 ### Release 0.2
   * Print function added

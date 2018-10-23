@@ -23,13 +23,4 @@ OXID eShop Admin Extension for Displaying and Printing the internal Shop Configu
 
 ## Release history ##
 
-* **Release 0.1**
-  * Initial release
-  * Retrieving and decoding of oxconfig records
-  * Filtering by extension, variable and/or value
-
-* **Release 0.2**
-  * Print function added
-  * Export as JSON added
-  * Translations changed to UTF-8
-  * Error corrections
+See [Changelog](CHANGELOG.md)
