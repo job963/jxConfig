@@ -196,7 +196,7 @@ class JxConfig extends AdminDetailsController
      */
     private function _getConfigData($sExtension = '', $sVarname = '', $sVarvalue = '', $sType = 'html') 
     {
-        $oConfig = oxRegistry::getConfig();
+        //-$oConfig = oxRegistry::getConfig();
         //$oDb = oxDb::getDb( oxDB::FETCH_MODE_ASSOC );
         $oDb = DatabaseProvider::getDb();
         
