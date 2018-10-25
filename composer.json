@@ -2,11 +2,22 @@
   "name": "jxmods/jxconfig",
   "description": "jxConfig - Display of Shop and Module Configurations",
   "type": "oxideshop-module",
-  "keywords": ["oxid", "modules", "eShop"],
+  "keywords": ["oxid", "modules", "admin"],
   "homepage": "https://github.com/job963/jxConfig",
-  "license": [
-    "GPL-3.0-only",
-    "proprietary"
+  "authors": [
+    {
+        "name": "Joachim Barthel",
+        "email": "jobarthel@gmail.com",
+        "homepage": "https://github.com/job963"
+    }
+],
+"support": {
+    "email": "jobarthel@gmail.com",
+    "issues": "https://github.com/job963/jxConfig/issues",
+    "docs": "https://github.com/job963/jxConfig/blob/master/README.md"
+},
+"license": [
+    "GPL-3.0-only"
   ],
   "minimum-stability": "stable",
   "extra": {
