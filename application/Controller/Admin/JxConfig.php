@@ -30,6 +30,7 @@ use OxidEsales\Eshop\Core\Module\Module;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\Eshop\Core\Request;
 
+
 class JxConfig extends AdminDetailsController
 {
 
