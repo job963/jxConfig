@@ -31,10 +31,10 @@ $aModule = array(
                         'jxconfig' => JxMods\JxConfig\Application\Controller\Admin\JxConfig::class
                             ),
     'files'         => array(
-                        'jxconfig'     	=> 'jxmods/jxconfig/application/controllers/admin/jxconfig.php'
+                        'jxconfig'     	=> 'jxmods/jxconfig/Application/Controller/Admin/jxconfig.php'
                         ),
     'templates'     => array(
-                        'jxconfig.tpl'  => 'jxmods/jxconfig/application/views/admin/tpl/jxconfig.tpl'
+                        'jxconfig.tpl'  => 'jxmods/jxconfig/Application/views/admin/tpl/jxconfig.tpl'
                         ),
     'events'        => array(
                         ),
