@@ -2,7 +2,10 @@
 
 ## Release history
 
-### Release 0.3
+### Release 0.3.1
+  * Renaming Application folder to uppercase
+
+### Release 0.3.0
   * Upgrade to OXID 6.x compatibility
 
 ### Release 0.2

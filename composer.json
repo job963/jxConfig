@@ -1,7 +1,7 @@
 {
   "name": "jxmods/jxconfig",
   "description": "jxConfig - Display of Shop and Module Configurations",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "type": "oxideshop-module",
   "keywords": [
       "oxid", 
